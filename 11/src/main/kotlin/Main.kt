@@ -19,6 +19,7 @@ fun main(args: Array<String>) {
     var wykX = (0..9).random()
     var wykY = (0..9).random()
     plansza[wykX][wykY] = '!'
+    var finish = intArrayOf(wykX,wykY)
 
 
     for (row in plansza) {
@@ -36,7 +37,7 @@ fun main(args: Array<String>) {
     do {
         println("Podaj jaki ruch chcesz wykonac: ")
         ruch = readLine()!!
-        wykonywanie_ruchu(ruch, robotek, plansza)
+        wykonywanie_ruchu(ruch, robotek,finish ,plansza)
 
 
     } while (((ruch.length > 5) || (!poprawnosc(ruch)) || (!((robotek[0] == wykX) && (robotek[1] == wykY)))))
@@ -60,11 +61,7 @@ fun poprawnosc(ruch: String): Boolean {
             else{ }
         }
     }
-    if(ilosc_dobrych == ruch.length){
-        return true
-    }else{
-        return false
-    }
+    return ilosc_dobrych == ruch.length
 
 }
 
@@ -87,47 +84,50 @@ fun ktore_odwiedziny(mapa: Array<CharArray>, polX: Int,polY: Int, poprzednia: Ch
     }
 }
 
-fun wykonywanie_ruchu(ruch: String, rob: IntArray, mapa: Array<CharArray>)  {
+fun wykonywanie_ruchu(ruch: String, rob: IntArray, finish: IntArray, mapa: Array<CharArray>)  {
     for (element in ruch){
         var znak = element
         var poprzednia: Char
         var polX = rob[0]
         var polY = rob[1]
-        if((znak == 'D') && (polX < 9)){
-            rob[0] = rob[0] + 1
-            val polXn = rob[0]
+        if((polX == finish[0]) && (polY == finish[1])){
+            break
+        }else{
+            if((znak == 'D') && (polX < 9)){
+                rob[0] = rob[0] + 1
+                val polXn = rob[0]
 
-            poprzednia = poprzednia_wartosc_pola(polXn, polY ,mapa)
-            ktore_odwiedziny(mapa, polX,polY,poprzednia)
-            mapa[polXn][polY] = 'x'
-        }else if((znak == 'L')  && (polY > 0)){
-            rob[1] = rob[1] - 1
-            val polYn = rob[1]
+                poprzednia = poprzednia_wartosc_pola(polXn, polY ,mapa)
+                ktore_odwiedziny(mapa, polX,polY,poprzednia)
+                mapa[polXn][polY] = 'x'
+            }else if((znak == 'L')  && (polY > 0)){
+                rob[1] = rob[1] - 1
+                val polYn = rob[1]
 
-            poprzednia = poprzednia_wartosc_pola(polX, polYn ,mapa)
-            ktore_odwiedziny(mapa, polX,polY,poprzednia)
-            mapa[polX][polYn] = 'x'
-        }else if((znak == 'U')  && (polX > 0)){
-            rob[0] = rob[0] - 1
-            val polXn = rob[0]
+                poprzednia = poprzednia_wartosc_pola(polX, polYn ,mapa)
+                ktore_odwiedziny(mapa, polX,polY,poprzednia)
+                mapa[polX][polYn] = 'x'
+            }else if((znak == 'U')  && (polX > 0)){
+                rob[0] = rob[0] - 1
+                val polXn = rob[0]
 
-            poprzednia = poprzednia_wartosc_pola(polXn, polY ,mapa)
-            ktore_odwiedziny(mapa, polX,polY,poprzednia)
-            mapa[polXn][polY] = 'x'
-        }else if((znak == 'R') && (polY < 9)){
-            rob[1] = rob[1] + 1
-            val polYn = rob[1]
+                poprzednia = poprzednia_wartosc_pola(polXn, polY ,mapa)
+                ktore_odwiedziny(mapa, polX,polY,poprzednia)
+                mapa[polXn][polY] = 'x'
+            }else if((znak == 'R') && (polY < 9)){
+                rob[1] = rob[1] + 1
+                val polYn = rob[1]
 
-            poprzednia = poprzednia_wartosc_pola(polX, polYn ,mapa)
-            ktore_odwiedziny(mapa, polX,polY,poprzednia)
-            mapa[polX][polYn] = 'x'
+                poprzednia = poprzednia_wartosc_pola(polX, polYn ,mapa)
+                ktore_odwiedziny(mapa, polX,polY,poprzednia)
+                mapa[polX][polYn] = 'x'
+            }
         }
 
     }
     for (row in mapa) {
         println(row.contentToString())
     }
-
 }
 
 
